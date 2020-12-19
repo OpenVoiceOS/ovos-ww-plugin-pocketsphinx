@@ -62,7 +62,11 @@ You can get acoustic models from [sourceforge](https://sourceforge.net/projects/
   Threshold is usually given in scientific notation.
 - `phonemes` The phonemes corresponding to the Wake Word. If your Wake Word 
   phrase is more than one word, remember to include a period (.) between 
-  words. NOTE: the number of words in keyword (split by " ") must match the 
+  words. 
+  - the number of words in keyword (split by " ") must match the 
   number of words in phonemes (split by ".")
+  - the easiest way to lookup phonemes is by looking at [the .dict files](https://github.com/JarbasLingua/iberian-sphinx/blob/master/es-es/es.dict)
+  - keep in mind phonemes depend on model used, there are several 
+    [Notational Systems](https://en.wikipedia.org/wiki/Phonetic_transcription#Notational_systems)
 - `expected_duration` defaults to 3 seconds (max value), this is the time 
   used for [saving wake word samples](https://github.com/MycroftAI/mycroft-core/blob/4c84f66e15a361d9f3d650def1ba97fa80506456/mycroft/configuration/mycroft.conf#L160)
