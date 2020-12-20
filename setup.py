@@ -5,14 +5,14 @@ from setuptools import setup
 PLUGIN_ENTRY_POINT = 'jarbas_pocketsphinx_ww_plug=jarbas_wake_word_plugin_pocketsphinx:PocketsphinxHotWordPlugin'
 setup(
     name='jarbas-wake-word-plugin-pocketsphinx',
-    version='0.1',
+    version='0.2.0',
     description='A wake word plugin for mycroft',
     url='https://github.com/JarbasLingua/jarbas-wake-word-plugin-pocketsphinx',
     author='JarbasAi',
     author_email='jarbasai@mailfence.com',
     license='Apache-2.0',
     packages=['jarbas_wake_word_plugin_pocketsphinx'],
-    install_requires=["pocketsphinx"],
+    install_requires=["pocketsphinx", "phoneme_guesser"],
     zip_safe=True,
     classifiers=[
         'Development Status :: 3 - Alpha',

@@ -11,7 +11,8 @@
 # limitations under the License.
 #
 from mycroft.client.speech.hotword_factory import HotWordEngine
-from jarbas_wake_word_plugin_pocketsphinx.utils import get_phonemes, msec_to_sec
+from jarbas_wake_word_plugin_pocketsphinx.utils import msec_to_sec
+from phoneme_guesser import get_phonemes
 from pocketsphinx import Decoder
 import speech_recognition as sr
 import os
@@ -29,8 +30,6 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         super().__init__(key_phrase, config, lang)
 
         # set default values if missing from config
-        if not self.lang.startswith("en") and not self.config.get("phonemes"):
-            raise ValueError("Phonemes not set")
         self.phonemes = self.config.get("phonemes") or get_phonemes(key_phrase)
         num_phonemes = len(self.phonemes.split(" "))
         phoneme_duration = msec_to_sec(self.config.get('phoneme_duration', 120))
