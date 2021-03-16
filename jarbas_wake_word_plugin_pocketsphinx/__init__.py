@@ -10,8 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from mycroft.client.speech.hotword_factory import HotWordEngine
-from jarbas_wake_word_plugin_pocketsphinx.utils import msec_to_sec
+from ovos_utils.plugins.hotwords import HotWordEngine, msec_to_sec
 from phoneme_guesser import get_phonemes
 from pocketsphinx import Decoder
 import speech_recognition as sr

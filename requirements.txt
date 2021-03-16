@@ -1,2 +1,3 @@
 pocketsphinx
 phoneme_guesser
+ovos_utils>=0.0.8a3
