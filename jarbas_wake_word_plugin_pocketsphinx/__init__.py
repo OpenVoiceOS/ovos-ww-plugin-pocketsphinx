@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from ovos_utils.plugins.hotwords import HotWordEngine, msec_to_sec
+from ovos_plugin_manager.templates.hotwords import HotWordEngine, msec_to_sec
 from phoneme_guesser import get_phonemes
 from pocketsphinx import Decoder
 import speech_recognition as sr
