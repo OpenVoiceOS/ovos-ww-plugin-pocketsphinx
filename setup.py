@@ -2,18 +2,19 @@
 from setuptools import setup
 
 
-PLUGIN_ENTRY_POINT = 'jarbas_pocketsphinx_ww_plug=jarbas_wake_word_plugin_pocketsphinx:PocketsphinxHotWordPlugin'
+PLUGIN_ENTRY_POINT = \
+    'ovos_ww_pocketsphinx=ovos_wake_word_plugin_pocketsphinx:PocketsphinxHotWordPlugin'
 setup(
-    name='jarbas-wake-word-plugin-pocketsphinx',
-    version='0.3.1',
-    description='A wake word plugin for mycroft',
-    url='https://github.com/JarbasLingua/jarbas-wake-word-plugin-pocketsphinx',
+    name='ovos-wake-word-plugin-pocketsphinx',
+    version='0.3.2',
+    description='A wake word plugin for OpenVoiceOS',
+    url='https://github.com/OpenVoiceOS/ovos-wakeword-plugin-pocketsphinx',
     author='JarbasAi',
     author_email='jarbasai@mailfence.com',
     license='Apache-2.0',
-    packages=['jarbas_wake_word_plugin_pocketsphinx'],
+    packages=['ovos_wake_word_plugin_pocketsphinx'],
     install_requires=["pocketsphinx", "phoneme_guesser",
-                      "ovos-plugin-manager>=0.0.1a2"],
+                      "ovos-plugin-manager>=0.0.1a3"],
     zip_safe=True,
     classifiers=[
         'Development Status :: 3 - Alpha',
