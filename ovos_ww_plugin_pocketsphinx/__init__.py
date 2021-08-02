@@ -11,7 +11,7 @@
 # limitations under the License.
 #
 from ovos_plugin_manager.templates.hotwords import HotWordEngine, msec_to_sec
-from phoneme_guesser import get_phonemes
+from ovos_utils.lang.phonemes import get_phonemes
 from pocketsphinx import Decoder
 import speech_recognition as sr
 import os

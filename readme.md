@@ -17,7 +17,7 @@ more info in the [docs](https://mycroft-ai.gitbook.io/docs/mycroft-technologies/
 
 ## Install
 
-`pip install ovos-wake-word-plugin-pocketsphinx`
+`pip install ovos-ww-plugin-pocketsphinx`
 
 Configure your wake word in mycroft.conf
 
@@ -27,7 +27,7 @@ Configure your wake word in mycroft.conf
  },
  "hotwords": {
     "andromeda": {
-        "module": "ovos_ww_pocketsphinx",
+        "module": "ovos-ww-plugin-pocketsphinx",
         "threshold": 1e-45
     }
   }
@@ -48,7 +48,7 @@ for portuguese
  },
  "hotwords": {
     "dinossauro": {
-        "module": "ovos_ww_pocketsphinx",
+        "module": "ovos-ww-plugin-pocketsphinx",
         "threshold": 1e-20,
         "phonemes": "d i n o s a u r o",
         "hmm": "/path/to/sourceforge/es-es/hmm/",
