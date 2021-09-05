@@ -6,7 +6,7 @@ PLUGIN_ENTRY_POINT = \
     'ovos-ww-plugin-pocketsphinx=ovos_ww_plugin_pocketsphinx:PocketsphinxHotWordPlugin'
 setup(
     name='ovos-ww-plugin-pocketsphinx',
-    version='0.1.0',
+    version='0.1.1',
     description='A wake word plugin for OpenVoiceOS',
     url='https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx',
     author='JarbasAi',

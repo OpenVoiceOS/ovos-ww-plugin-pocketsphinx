@@ -10,13 +10,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import os
+import tempfile
+from os.path import join, dirname
+
+import speech_recognition as sr
 from ovos_plugin_manager.templates.hotwords import HotWordEngine, msec_to_sec
 from ovos_utils.lang.phonemes import get_phonemes
 from pocketsphinx import Decoder
-import speech_recognition as sr
-import os
-from os.path import join, dirname
-import tempfile
 
 
 class PocketsphinxHotWordPlugin(HotWordEngine):
@@ -25,13 +26,15 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
     PocketSphinx is very general purpose but has a somewhat high error rate.
     The key advantage is to be able to specify the wake word with phonemes.
     """
+
     def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
         super().__init__(key_phrase, config, lang)
 
         # set default values if missing from config
         self.phonemes = self.config.get("phonemes") or get_phonemes(key_phrase)
         num_phonemes = len(self.phonemes.split(" "))
-        phoneme_duration = msec_to_sec(self.config.get('phoneme_duration', 120))
+        phoneme_duration = msec_to_sec(
+            self.config.get('phoneme_duration', 120))
         self.expected_duration = self.config.get("expected_duration") or \
                                  num_phonemes * phoneme_duration
         self.hmm = self.config.get("hmm")
@@ -42,7 +45,9 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         # read user params
         # TODO threshold is a bitch to automate, maybe raise exception ?
         self.threshold = self.config.get("threshold", 1e-30)
-        self.sample_rate = self.listener_config.get("sample_rate", 1600)
+
+        self.sample_rate = self.config.get("sample_rate") or \
+                           self.listener_config.get("sample_rate") or 16000
         dict_name = self.create_dict(self.key_phrase, self.phonemes)
         config = self.create_config(dict_name, Decoder.default_config())
         self.decoder = Decoder(config)
