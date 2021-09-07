@@ -72,7 +72,9 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         config.set_float('-kws_threshold', float(self.threshold))
         config.set_float('-samprate', self.sample_rate)
         config.set_int('-nfft', 2048)
-        config.set_string('-logfn', '/dev/null')
+        logfn = '/dev/null'
+        if os.name == 'nt': logfn = 'NUL'
+        config.set_string('-logfn', logfn)
         return config
 
     @staticmethod
