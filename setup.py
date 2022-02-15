@@ -13,7 +13,7 @@ setup(
     author_email='jarbasai@mailfence.com',
     license='Apache-2.0',
     packages=['ovos_ww_plugin_pocketsphinx'],
-    install_requires=["pocketsphinx", "phoneme_guesser",
+    install_requires=["pocketsphinx",
                       "ovos-plugin-manager>=0.0.1a7"],
     zip_safe=True,
     classifiers=[
