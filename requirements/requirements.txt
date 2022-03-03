@@ -1,3 +1,4 @@
 pocketsphinx
 ovos-plugin-manager>=0.0.1
 phoneme_guesser
+SpeechRecognition>=3.8.1
