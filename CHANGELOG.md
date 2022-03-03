@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/HEAD)
+## [V0.1.2a2](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.2a2) (2022-03-03)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.2a1...HEAD)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.2a1...V0.1.2a2)
 
 **Fixed bugs:**
 
