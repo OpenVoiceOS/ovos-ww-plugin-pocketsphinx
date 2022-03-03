@@ -16,8 +16,8 @@ from os.path import join, dirname
 
 import speech_recognition as sr
 from ovos_plugin_manager.templates.hotwords import HotWordEngine, msec_to_sec
-from ovos_utils.lang.phonemes import get_phonemes
 from pocketsphinx import Decoder
+from phoneme_guesser import guess_phonemes
 
 
 class PocketsphinxHotWordPlugin(HotWordEngine):
@@ -31,7 +31,8 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         super().__init__(key_phrase, config, lang)
 
         # set default values if missing from config
-        self.phonemes = self.config.get("phonemes") or get_phonemes(key_phrase)
+        self.phonemes = self.config.get("phonemes") or \
+                        guess_phonemes(key_phrase, lang)
         num_phonemes = len(self.phonemes.split(" "))
         phoneme_duration = msec_to_sec(
             self.config.get('phoneme_duration', 120))

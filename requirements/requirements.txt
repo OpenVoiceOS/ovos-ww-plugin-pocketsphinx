@@ -1,2 +1,3 @@
 pocketsphinx
 ovos-plugin-manager>=0.0.1
+phoneme_guesser
