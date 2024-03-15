@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/HEAD)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.3...HEAD)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.4a1...HEAD)
+
+**Fixed bugs:**
+
+- downgrade pocketsphinx - revert pull/4 [\#5](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/5) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.1.4a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.4a1) (2024-03-12)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.3...V0.1.4a1)
 
 **Implemented enhancements:**
 
