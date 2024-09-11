@@ -1,32 +1,28 @@
 # Changelog
 
-## [V0.1.3a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.3a1) (2022-10-05)
+## [0.1.4a3](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.1.4a3) (2024-09-11)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.2...V0.1.3a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.4a2...0.1.4a3)
 
 **Merged pull requests:**
 
-- Add version spec to pocketsphinx dependency [\#3](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/3) ([NeonDaniel](https://github.com/NeonDaniel))
+- feat:semver [\#7](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/7) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V0.1.2](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.2) (2022-03-03)
+## [V0.1.4a2](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.4a2) (2024-03-15)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.2a2...V0.1.2)
-
-## [V0.1.2a2](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.2a2) (2022-03-03)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.2a1...V0.1.2a2)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.4a1...V0.1.4a2)
 
 **Fixed bugs:**
 
-- fix/phoneme\_guessing\_utils\_compat [\#2](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/2) ([JarbasAl](https://github.com/JarbasAl))
+- downgrade pocketsphinx - revert pull/4 [\#5](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/5) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V0.1.2a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.2a1) (2022-02-28)
+## [V0.1.4a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.4a1) (2024-03-12)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/f5c0a9ccef6f7797ec3a1672a0eb44eee0665a43...V0.1.2a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.3...V0.1.4a1)
 
-**Merged pull requests:**
+**Implemented enhancements:**
 
-- Sphinx windows compatibility [\#1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/1) ([Joanguitar](https://github.com/Joanguitar))
+- Update requirements.txt [\#4](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/4) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
