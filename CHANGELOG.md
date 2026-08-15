@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.3.0a1) (2026-08-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.2.2a1...0.3.0a1)
+
+**Merged pull requests:**
+
+- feat: optional G2P phoneme guessing via orthography2ipa and scriptconv [\#13](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/13) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.2.2a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.2.2a1) (2026-08-15)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.2.1a1...0.2.2a1)
