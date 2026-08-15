@@ -3,6 +3,19 @@
 Behavior changes since the last stable release, newest first. This file is
 reset at each stable release.
 
+## 0.2.2a1
+
+- Optional grapheme-to-phoneme fallback: with the `g2p` extra installed
+  (`pip install ovos-ww-plugin-pocketsphinx[g2p]`, pulling orthography2ipa
+  and scriptconv), an out-of-dictionary key phrase gets a best-effort
+  guessed pronunciation instead of raising, with every guessed phone
+  validated against the acoustic model's own dictionary and a warning
+  recommending explicit `phonemes` config. Guesses that produce symbols the
+  converter cannot map still raise the explicit-config error rather than
+  loading a broken pronunciation; current scriptconv releases cannot map
+  the English rhotic `ɹ`, so many English guesses stay unavailable until
+  its next release.
+
 ## 0.2.1a1
 
 - The `phoneme_guesser` dependency is gone (ancient and unmaintained). With

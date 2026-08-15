@@ -19,6 +19,53 @@ from ovos_utils.log import LOG
 from pocketsphinx import Decoder, get_model_path
 
 
+#: ARPAbet symbols some notations emit that the bundled acoustic model's
+#: dictionary does not use, folded onto their common realisations.
+ARPA_ALIASES = {"AX": "AH", "AXR": "ER", "IX": "IH", "UX": "UW"}
+
+
+def guess_phonemes(key_phrase, lang):
+    """Best-effort grapheme-to-phoneme via orthography2ipa + scriptconv.
+
+    Returns a phoneme string in this plugin's config format (words separated
+    by ``.``), or None when the optional G2P stack is not installed or emits
+    symbols that cannot be mapped. Guessed pronunciations are approximate -
+    an explicit "phonemes" config always beats them.
+    """
+    try:
+        from orthography2ipa import G2P
+        from scriptconv import ipa_to_arpa
+    except ImportError:
+        return None
+    try:
+        g2p = G2P(lang.split("-")[0])
+        words = []
+        for word in key_phrase.split():
+            candidates = g2p.candidates(word)
+            ipa = (max(candidates, key=lambda c: c.score).ipa
+                   if candidates else str(g2p.transcribe(word)))
+            ipa = "".join(ch for ch in ipa if ch not in "\u02c8\u02cc\u02d0.")
+            phones = [ARPA_ALIASES.get(ph, ph)
+                      for ph in ipa_to_arpa(ipa).split()]
+            if not phones or any("?" in ph for ph in phones):
+                return None
+            words.append(" ".join(phones))
+        return " . ".join(words)
+    except Exception as e:
+        LOG.warning(f"G2P phoneme guess failed for {key_phrase!r}: {e}")
+        return None
+
+
+def dictionary_phoneset(dict_path):
+    """Every phone used by a sphinx pronunciation dictionary."""
+    phones = set()
+    with open(dict_path, encoding="utf-8") as f:
+        for line in f:
+            parts = line.split()
+            phones.update(p for p in parts[1:])
+    return phones
+
+
 #: Pronunciations for key phrases whose words are not in the bundled
 #: dictionary, so the stock OVOS wake words work with no configuration.
 BUILTIN_PHONEMES = {
@@ -65,9 +112,28 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
                     "'dict' file in the hotword config")
             missing = self.missing_words(dict_name, self.key_phrase)
             if missing:
-                raise ValueError(
-                    f"words {missing} not in pronunciation dictionary "
-                    f"{dict_name}; provide 'phonemes' in the hotword config")
+                guessed = guess_phonemes(self.key_phrase, self.lang)
+                if guessed:
+                    inventory = dictionary_phoneset(dict_name)
+                    phones = [p for p in guessed.split() if p != "."]
+                    bad = sorted(set(phones) - inventory)
+                    if bad:
+                        raise ValueError(
+                            f"G2P guessed phones {bad} that the model at "
+                            f"{self.hmm} does not know; provide 'phonemes' "
+                            f"in the hotword config")
+                    LOG.warning(
+                        f"words {missing} not in {dict_name}; using G2P "
+                        f"guess {guessed!r} - approximate, set 'phonemes' "
+                        f"in the hotword config for reliable detection")
+                    self.phonemes = guessed
+                    dict_name = self.create_dict(self.key_phrase, guessed)
+                else:
+                    raise ValueError(
+                        f"words {missing} not in pronunciation dictionary "
+                        f"{dict_name}; provide 'phonemes' in the hotword "
+                        f"config, or install the optional G2P stack "
+                        f"(pip install ovos-ww-plugin-pocketsphinx[g2p])")
         num_phonemes = (len(self.phonemes.split(" ")) if self.phonemes
                         else len(self.key_phrase.replace(" ", "")))
         phoneme_duration = msec_to_sec(

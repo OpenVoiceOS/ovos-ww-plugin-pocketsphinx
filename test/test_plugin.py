@@ -33,8 +33,12 @@ class TestDetection(unittest.TestCase):
         self.assertFalse(p.found_wake_word(b"\x00" * 32000))
 
     def test_out_of_dictionary_word_requires_phonemes(self):
-        with self.assertRaises(ValueError):
-            PocketsphinxHotWordPlugin("hey zorblefax", {})
+        # deterministic: with no usable G2P guess, out-of-dictionary raises
+        from unittest import mock
+        with mock.patch("ovos_ww_plugin_pocketsphinx.guess_phonemes",
+                        return_value=None):
+            with self.assertRaises(ValueError):
+                PocketsphinxHotWordPlugin("hey zorblefax", {})
 
     def test_builtin_hey_mycroft_needs_no_config(self):
         p = PocketsphinxHotWordPlugin("hey mycroft", {})
@@ -54,3 +58,27 @@ class TestDetection(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestOptionalG2P(unittest.TestCase):
+    """The g2p extra (orthography2ipa + scriptconv) guesses phonemes for
+    out-of-dictionary words; unmapped symbols degrade to the explicit-config
+    error instead of loading a broken pronunciation."""
+
+    def test_guess_produces_valid_phones(self):
+        from ovos_ww_plugin_pocketsphinx import guess_phonemes, \
+            dictionary_phoneset
+        from pocketsphinx import get_model_path
+        from os.path import join
+        guessed = guess_phonemes("banana", "en-us")
+        self.assertIsInstance(guessed, str)
+        inventory = dictionary_phoneset(
+            join(get_model_path(), "en-us", "cmudict-en-us.dict"))
+        for phone in guessed.split():
+            if phone != ".":
+                self.assertIn(phone, inventory)
+
+    def test_unmappable_word_returns_none_not_garbage(self):
+        from ovos_ww_plugin_pocketsphinx import guess_phonemes
+        guessed = guess_phonemes("mycroft", "en-us")
+        self.assertTrue(guessed is None or "?" not in guessed)
