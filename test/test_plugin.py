@@ -24,10 +24,32 @@ class TestDetection(unittest.TestCase):
             "hey mycroft", {"phonemes": "HH EY . M AY K R AO F T"})
         self.assertFalse(p.found_wake_word(self.frames))
 
-    def test_phoneme_guesser_default(self):
+    def test_dictionary_default_no_phonemes_config(self):
+        # "go" and "forward" are in the bundled cmudict, so no phonemes
+        # config is needed and detection still works on the reference audio
         p = PocketsphinxHotWordPlugin("go forward", {})
-        self.assertIsInstance(p.phonemes, str)
+        self.assertIsNone(p.phonemes)
+        self.assertTrue(p.found_wake_word(self.frames))
         self.assertFalse(p.found_wake_word(b"\x00" * 32000))
+
+    def test_out_of_dictionary_word_requires_phonemes(self):
+        with self.assertRaises(ValueError):
+            PocketsphinxHotWordPlugin("hey zorblefax", {})
+
+    def test_builtin_hey_mycroft_needs_no_config(self):
+        p = PocketsphinxHotWordPlugin("hey mycroft", {})
+        self.assertEqual(p.phonemes, "HH EY . M AY K R AO F T")
+        self.assertFalse(p.found_wake_word(self.frames))
+
+    def test_missing_words_helper(self):
+        from pocketsphinx import get_model_path
+        from os.path import join
+        d = join(get_model_path(), "en-us", "cmudict-en-us.dict")
+        self.assertEqual(
+            PocketsphinxHotWordPlugin.missing_words(d, "go forward"), [])
+        self.assertEqual(
+            PocketsphinxHotWordPlugin.missing_words(d, "hey mycroft"),
+            ["mycroft"])
 
 
 if __name__ == "__main__":

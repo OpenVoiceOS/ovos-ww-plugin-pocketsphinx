@@ -15,8 +15,15 @@ import tempfile
 from os.path import join
 
 from ovos_plugin_manager.templates.hotwords import HotWordEngine, msec_to_sec
-from phoneme_guesser import get_phonemes
+from ovos_utils.log import LOG
 from pocketsphinx import Decoder, get_model_path
+
+
+#: Pronunciations for key phrases whose words are not in the bundled
+#: dictionary, so the stock OVOS wake words work with no configuration.
+BUILTIN_PHONEMES = {
+    "hey mycroft": "HH EY . M AY K R AO F T",
+}
 
 
 class PocketsphinxHotWordPlugin(HotWordEngine):
@@ -30,14 +37,6 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         super().__init__(key_phrase, config)
         self.lang = self.config.get("lang", lang).lower()
 
-        # set default values if missing from config
-        self.phonemes = self.config.get("phonemes") or \
-                        get_phonemes(key_phrase, lang)
-        num_phonemes = len(self.phonemes.split(" "))
-        phoneme_duration = msec_to_sec(
-            self.config.get('phoneme_duration', 120))
-        self.expected_duration = self.config.get("expected_duration") or \
-                                 num_phonemes * phoneme_duration
         self.hmm = self.config.get("hmm")
         if not self.hmm and self.lang.startswith("en"):
             self.hmm = self.get_default_english_model()
@@ -46,8 +45,37 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
         # TODO threshold is a bitch to automate, maybe raise exception ?
         self.threshold = self.config.get("threshold", 1e-30)
 
+        # pronunciation: an explicit "phonemes" config builds a dedicated
+        # dictionary for the key phrase; otherwise the words are looked up in
+        # a real pronunciation dictionary ("dict" config, defaulting to the
+        # cmudict bundled with the English model) - a word missing there
+        # needs "phonemes" in config, there is no grapheme guessing
+        self.phonemes = self.config.get("phonemes") or \
+                        BUILTIN_PHONEMES.get(self.key_phrase)
+        if self.phonemes:
+            dict_name = self.create_dict(self.key_phrase, self.phonemes)
+        else:
+            dict_name = self.config.get("dict")
+            if not dict_name and self.lang.startswith("en"):
+                dict_name = join(get_model_path(), "en-us",
+                                 "cmudict-en-us.dict")
+            if not dict_name:
+                raise ValueError(
+                    "No pronunciation available: provide 'phonemes' or a "
+                    "'dict' file in the hotword config")
+            missing = self.missing_words(dict_name, self.key_phrase)
+            if missing:
+                raise ValueError(
+                    f"words {missing} not in pronunciation dictionary "
+                    f"{dict_name}; provide 'phonemes' in the hotword config")
+        num_phonemes = (len(self.phonemes.split(" ")) if self.phonemes
+                        else len(self.key_phrase.replace(" ", "")))
+        phoneme_duration = msec_to_sec(
+            self.config.get('phoneme_duration', 120))
+        self.expected_duration = self.config.get("expected_duration") or \
+                                 num_phonemes * phoneme_duration
+
         self.sample_rate = self.config.get("sample_rate") or 16000
-        dict_name = self.create_dict(self.key_phrase, self.phonemes)
         self.decoder = Decoder(hmm=self.hmm,
                                dict=dict_name,
                                keyphrase=self.key_phrase,
@@ -56,6 +84,21 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
                                nfft=2048,
                                logfn=os.devnull)
         self._in_utt = False
+
+    @staticmethod
+    def missing_words(dict_path, key_phrase):
+        """Key-phrase words absent from a sphinx pronunciation dictionary."""
+        words = set(key_phrase.lower().split())
+        try:
+            with open(dict_path, encoding="utf-8") as f:
+                for line in f:
+                    entry = line.split(" ", 1)[0].split("(", 1)[0].strip()
+                    words.discard(entry.lower())
+                    if not words:
+                        break
+        except OSError as e:
+            LOG.error(f"could not read pronunciation dictionary: {e}")
+        return sorted(words)
 
     @staticmethod
     def create_dict(key_phrase, phonemes):

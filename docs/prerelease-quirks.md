@@ -3,6 +3,16 @@
 Behavior changes since the last stable release, newest first. This file is
 reset at each stable release.
 
+## 0.2.1a1
+
+- The `phoneme_guesser` dependency is gone (ancient and unmaintained). With
+  no `phonemes` config, key-phrase words are now validated against a real
+  pronunciation dictionary — the `dict` config path, defaulting to the
+  cmudict bundled with the English model — instead of grapheme guessing.
+  A key phrase with a word missing from the dictionary raises `ValueError`
+  at load, telling the user to set `phonemes`. "hey mycroft" carries a
+  built-in pronunciation and keeps working with no configuration.
+
 ## 0.2.0a1
 
 - Ported to pocketsphinx 5: the ancient `pocketsphinx~=0.1` SWIG bindings do
