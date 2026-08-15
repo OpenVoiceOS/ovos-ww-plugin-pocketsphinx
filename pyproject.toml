@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos-ww-plugin-pocketsphinx"
+description = "OpenVoiceOS wake word plugin for pocketsphinx"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+dynamic = ["version"]
+dependencies = [
+    "pocketsphinx>=5.0.0",
+    "ovos-plugin-manager>=1.0.0",
+    "phoneme_guesser>=0.1.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx"
+
+[project.entry-points."opm.wake_word"]
+"ovos-ww-plugin-pocketsphinx" = "ovos_ww_plugin_pocketsphinx:PocketsphinxHotWordPlugin"
+
+[project.entry-points."mycroft.plugin.wake_word"]
+"ovos-ww-plugin-pocketsphinx" = "ovos_ww_plugin_pocketsphinx:PocketsphinxHotWordPlugin"
+
+[tool.setuptools]
+packages = ["ovos_ww_plugin_pocketsphinx"]
+
+[tool.setuptools.dynamic]
+version = {attr = "ovos_ww_plugin_pocketsphinx.version.__version__"}
