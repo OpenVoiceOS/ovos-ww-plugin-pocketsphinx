@@ -1,16 +1,20 @@
 # Changelog
 
+## [0.2.2a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.2.2a1) (2026-08-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.2.1a1...0.2.2a1)
+
+**Merged pull requests:**
+
+- fix: replace phoneme\_guesser with real pronunciation dictionaries [\#11](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/11) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.2.1a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.2.1a1) (2026-08-15)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/V0.1.4...0.2.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.1.4...0.2.1a1)
 
 **Merged pull requests:**
 
 - fix: port to pocketsphinx 5 for current Python versions [\#9](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/9) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.1.4](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/V0.1.4) (2024-09-11)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.1.4...V0.1.4)
 
 
 
