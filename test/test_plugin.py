@@ -82,3 +82,19 @@ class TestOptionalG2P(unittest.TestCase):
         from ovos_ww_plugin_pocketsphinx import guess_phonemes
         guessed = guess_phonemes("mycroft", "en-us")
         self.assertTrue(guessed is None or "?" not in guessed)
+
+    def test_guess_takes_the_engine_pronunciation(self):
+        # the bundled cmudict is an independent gold for these regular words
+        from ovos_ww_plugin_pocketsphinx import guess_phonemes
+        from pocketsphinx import get_model_path
+        from os.path import join
+        gold = {}
+        with open(join(get_model_path(), "en-us", "cmudict-en-us.dict"),
+                  encoding="utf-8") as f:
+            for line in f:
+                word, *phones = line.split()
+                gold.setdefault(word, " ".join(phones))
+        for word in ("cat", "cup", "sit", "stop"):
+            self.assertEqual(guess_phonemes(word, "en-us"), gold[word])
+        self.assertEqual(guess_phonemes("cup stop", "en-us"),
+                         f"{gold['cup']} . {gold['stop']}")
