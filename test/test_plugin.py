@@ -98,3 +98,65 @@ class TestOptionalG2P(unittest.TestCase):
             self.assertEqual(guess_phonemes(word, "en-us"), gold[word])
         self.assertEqual(guess_phonemes("cup stop", "en-us"),
                          f"{gold['cup']} . {gold['stop']}")
+
+
+def to_arpa(ipa):
+    """ARPAbet for *ipa*, through scriptconv and the plugin's alias table."""
+    from scriptconv import ipa_to_arpa
+    from ovos_ww_plugin_pocketsphinx import ARPA_ALIASES
+    ipa = "".join(ch for ch in ipa if ch not in "\u02c8\u02cc\u02d0.")
+    return " ".join(ARPA_ALIASES.get(ph, ph) for ph in ipa_to_arpa(ipa).split())
+
+
+def lexicon_arpa(word):
+    """ARPAbet for the IPA that the packaged en-GB TSV file lists for *word*.
+
+    The IPA comes from the o2i-lexicons data file, not from engine output.
+    """
+    from o2i_lexicons import DATA_DIR
+    for path in sorted((DATA_DIR / "en-GB").glob("*.tsv")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            entry, _, ipa = line.partition("\t")
+            if entry == word:
+                return to_arpa(ipa)
+    raise LookupError(f"{word!r} is not in the packaged en-GB lexicon")
+
+
+class TestPackagedLexicons(unittest.TestCase):
+    """The packaged_lexicons key (default on) enables o2i-lexicons for the
+    language the guess transcribes. orthography2ipa keeps lexicons
+    process-wide, so every test starts and ends with clear_lexicons()."""
+
+    def setUp(self):
+        import orthography2ipa
+        orthography2ipa.clear_lexicons()
+
+    tearDown = setUp
+
+    def test_guess_uses_the_packaged_lexicon(self):
+        from ovos_ww_plugin_pocketsphinx import guess_phonemes
+        expected = lexicon_arpa("yacht")
+        self.assertEqual(expected, "Y AA T")  # the bundled cmudict entry
+        self.assertEqual(guess_phonemes("yacht", "en-us"), expected)
+
+    def test_off_equals_plain_orthography2ipa(self):
+        import orthography2ipa
+        from ovos_ww_plugin_pocketsphinx import guess_phonemes
+        off = guess_phonemes("yacht", "en-us", packaged_lexicons=False)
+        self.assertEqual(orthography2ipa.available_lexicon_codes(), [])
+        plain = to_arpa(orthography2ipa.G2P("en").transcribe("yacht"))
+        self.assertEqual(off, plain)
+        self.assertNotEqual(off, lexicon_arpa("yacht"))
+
+    def test_plugin_enables_the_lexicon_by_default(self):
+        # "abaci" is not in the bundled cmudict, so the plugin guesses it
+        p = PocketsphinxHotWordPlugin("abaci", {})
+        self.assertEqual(p.phonemes, lexicon_arpa("abaci"))
+
+    def test_plugin_config_turns_the_lexicon_off(self):
+        import orthography2ipa
+        p = PocketsphinxHotWordPlugin("abaci", {"packaged_lexicons": False})
+        self.assertEqual(orthography2ipa.available_lexicon_codes(), [])
+        plain = to_arpa(orthography2ipa.G2P("en").transcribe("abaci"))
+        self.assertEqual(p.phonemes, plain)
+        self.assertNotEqual(p.phonemes, lexicon_arpa("abaci"))

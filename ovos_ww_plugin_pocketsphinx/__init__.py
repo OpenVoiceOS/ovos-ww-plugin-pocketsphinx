@@ -24,7 +24,7 @@ from pocketsphinx import Decoder, get_model_path
 ARPA_ALIASES = {"AX": "AH", "AXR": "ER", "IX": "IH", "UX": "UW"}
 
 
-def guess_phonemes(key_phrase, lang):
+def guess_phonemes(key_phrase, lang, packaged_lexicons=True):
     """Best-effort grapheme-to-phoneme via orthography2ipa + scriptconv.
 
     Returns a phoneme string in this plugin's config format (words separated
@@ -32,14 +32,23 @@ def guess_phonemes(key_phrase, lang):
     symbols that cannot be mapped. Each word takes the pronunciation that the
     engine chooses (``G2P.transcribe``). Guessed pronunciations are
     approximate - an explicit "phonemes" config always beats them.
+
+    With ``packaged_lexicons``, the guess first enables the installed
+    packaged lexicon (o2i-lexicons) for *lang*, when a package serves it.
+    orthography2ipa keeps lexicons process-wide, so the lexicon then serves
+    every orthography2ipa caller in the process.
     """
     try:
-        from orthography2ipa import G2P
+        import orthography2ipa
         from scriptconv import ipa_to_arpa
     except ImportError:
         return None
     try:
-        g2p = G2P(lang.split("-")[0])
+        code = lang.split("-")[0]
+        if (packaged_lexicons and orthography2ipa.resolve(code)
+                in orthography2ipa.packaged_lexicon_sources()):
+            orthography2ipa.use_packaged_lexicons([code])
+        g2p = orthography2ipa.G2P(code)
         words = []
         for word in key_phrase.split():
             ipa = str(g2p.transcribe(word))
@@ -111,7 +120,9 @@ class PocketsphinxHotWordPlugin(HotWordEngine):
                     "'dict' file in the hotword config")
             missing = self.missing_words(dict_name, self.key_phrase)
             if missing:
-                guessed = guess_phonemes(self.key_phrase, self.lang)
+                guessed = guess_phonemes(
+                    self.key_phrase, self.lang,
+                    self.config.get("packaged_lexicons", True))
                 if guessed:
                     inventory = dictionary_phoneset(dict_name)
                     phones = [p for p in guessed.split() if p != "."]

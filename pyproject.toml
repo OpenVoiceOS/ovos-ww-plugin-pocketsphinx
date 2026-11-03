@@ -16,7 +16,8 @@ dependencies = [
 
 [project.optional-dependencies]
 g2p = [
-    "orthography2ipa>=7.9.0a1",
+    "orthography2ipa>=7.112.0a1",  # >=7.112.0a1 adds use_packaged_lexicons
+    "o2i-lexicons>=0.1.0a1",
     "scriptconv>=0.0.4a9",  # >=0.0.4a23 adds the English rhotic/British-vowel aliases
 ]
 
