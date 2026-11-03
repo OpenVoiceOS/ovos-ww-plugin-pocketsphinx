@@ -29,8 +29,9 @@ def guess_phonemes(key_phrase, lang):
 
     Returns a phoneme string in this plugin's config format (words separated
     by ``.``), or None when the optional G2P stack is not installed or emits
-    symbols that cannot be mapped. Guessed pronunciations are approximate -
-    an explicit "phonemes" config always beats them.
+    symbols that cannot be mapped. Each word takes the pronunciation that the
+    engine chooses (``G2P.transcribe``). Guessed pronunciations are
+    approximate - an explicit "phonemes" config always beats them.
     """
     try:
         from orthography2ipa import G2P
@@ -41,9 +42,7 @@ def guess_phonemes(key_phrase, lang):
         g2p = G2P(lang.split("-")[0])
         words = []
         for word in key_phrase.split():
-            candidates = g2p.candidates(word)
-            ipa = (max(candidates, key=lambda c: c.score).ipa
-                   if candidates else str(g2p.transcribe(word)))
+            ipa = str(g2p.transcribe(word))
             ipa = "".join(ch for ch in ipa if ch not in "\u02c8\u02cc\u02d0.")
             phones = [ARPA_ALIASES.get(ph, ph)
                       for ph in ipa_to_arpa(ipa).split()]
