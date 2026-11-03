@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.4.0a1) (2026-11-03)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.3.1a1...0.4.0a1)
+
+**Merged pull requests:**
+
+- feat: use the packaged o2i lexicons in the phoneme guess [\#17](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/17) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.3.1a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.3.1a1) (2026-11-03)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.3.0a1...0.3.1a1)
