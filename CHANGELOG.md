@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.3.1a1) (2026-11-03)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.3.0a1...0.3.1a1)
+
+**Merged pull requests:**
+
+- fix: guess phonemes from the pronunciation the engine chooses [\#16](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/pull/16) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.3.0a1](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/tree/0.3.0a1) (2026-08-15)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-ww-plugin-pocketsphinx/compare/0.2.2a1...0.3.0a1)
