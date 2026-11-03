@@ -76,6 +76,15 @@ for portuguese
   - the number of words in keyword (split by " ") must match the number of words in phonemes (split by ".")
   - lookup phonemes by inspecting [the .dict files](https://github.com/OpenJarbas/phoneme_guesser/tree/master/phoneme_guesser/res) for similar words
   - phonemes depend on [acoustic model](https://sourceforge.net/projects/cmusphinx/files/Acoustic%20and%20Language%20Models/) used, there are several [Notational Systems](https://en.wikipedia.org/wiki/Phonetic_transcription#Notational_systems)
+- `packaged_lexicons` defaults to `true`. The `g2p` extra installs
+  [o2i-lexicons](https://github.com/TigreGotico/o2i-lexicons), which holds
+  the words that the orthography2ipa rules get wrong. With `true`, the guess
+  for a word that is not in the dictionary uses the packaged lexicon for
+  `lang`, when a package serves that language. English uses the en-GB
+  lexicon. Set `false` to guess from the rules only.
+  - orthography2ipa keeps its lexicons for the whole process. The lexicon
+    then also serves the other orthography2ipa callers in the process, and
+    `false` does not disable a lexicon that another caller enabled.
 
 - `expected_duration` defaults to 3 seconds (max value), this is the time 
   used for [saving wake word samples](https://github.com/MycroftAI/mycroft-core/blob/4c84f66e15a361d9f3d650def1ba97fa80506456/mycroft/configuration/mycroft.conf#L160)
