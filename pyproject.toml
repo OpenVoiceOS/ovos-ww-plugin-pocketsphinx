@@ -7,7 +7,7 @@ name = "ovos-ww-plugin-pocketsphinx"
 description = "OpenVoiceOS wake word plugin for pocketsphinx"
 readme = "README.md"
 license = {text = "Apache-2.0"}
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dynamic = ["version"]
 dependencies = [
     "pocketsphinx>=5.0.0",
